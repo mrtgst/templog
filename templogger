@@ -1,25 +1,28 @@
 #!/bin/bash
-# Script to get and store temperature
+# templogger is a script to get and store cpu temperature
 
-# $SYS_TEMP_FILE is the system file showing the temperature
+# location of system file with the temperature
 SYS_TEMP_FILE='/sys/class/thermal/thermal_zone0/temp' 
-# $LOG_FILE is where the collected temperatures are stored
-LOG_FILE="$HOME/templogger.txt"
+# log file location 
+LOG_DIR="$HOME/.local/share"
+LOG_FILE="$LOG_DIR/templogger.txt"
 
 create_log_file () {
-if ! [ -e $LOG_FILE ]; then
-       touch $LOG_FILE
-       HEADER='date time temp'
-       echo "$HEADER" >> $LOG_FILE
-       echo "$LOG_FILE created"
-fi
+    if ! [ -e $LOG_FILE ]; then
+        mkdir --parents $LOG_DIR
+        touch $LOG_FILE
+        HEADER='date time temp'
+        echo "$HEADER" >> $LOG_FILE
+        echo "Created log file at $LOG_FILE"
+    fi
+}
+
+log_temp () {
+    DATE=$(date +'%Y-%m-%d %H:%M')
+    TEMP=$(head -n 1 $SYS_TEMP_FILE | xargs -I{} awk "BEGIN {printf \"%.2f\n\", {}/1000}")
+    LOG_STRING="$DATE $TEMP"
+    echo "$LOG_STRING" >> $LOG_FILE 
 }
 
 create_log_file
-
-DATE=$(date +'%Y-%m-%d %H:%M')
-TEMP=$(head -n 1 $SYS_TEMP_FILE | xargs -I{} awk "BEGIN {printf \"%.2f\n\", {}/1000}")
-LOG_STRING="$DATE $TEMP"
-echo "$LOG_STRING" >> $LOG_FILE 
-
-
+log_temp

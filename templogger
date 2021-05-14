@@ -32,8 +32,7 @@ print_log () {
 plot_log () {
 # plot temperatures with gnuplot
 gnuplot -d -e "set terminal dumb; set xdata time; set timefmt '%M:%S'; \
-	set format x '%M:%S'; set xrange ['00:00':'23:59']; set yrange [50:70]; \
-	set title 'Temperature last 24 hours';
+	set format x '%M:%S'; set title 'Temperature last 24 hours'; \
 	set tics scale 0; plot '$LOG_FILE' using 2:3 with lines notitle"
 }
 

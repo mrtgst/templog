@@ -24,5 +24,16 @@ log_temp () {
     echo "$LOG_STRING" >> $LOG_FILE 
 }
 
-create_log_file
-log_temp
+print_log () {
+    head -n 1 "$LOG_FILE"
+    tail -n +2 "$LOG_FILE"
+}
+
+case "$1" in
+    "log")
+        create_log_file
+        log_temp;;
+    "print")
+        print_log;;
+esac
+

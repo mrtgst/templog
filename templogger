@@ -7,6 +7,13 @@ SYS_TEMP_FILE='/sys/class/thermal/thermal_zone0/temp'
 LOG_DIR="$HOME/.local/share"
 LOG_FILE="$LOG_DIR/templogger.txt"
 
+print_error_msg () {
+    echo 'Not a valid argument. Valid arguments are:'
+    printf "\tlog\tWrite temperature to log file\n"
+    printf "\tprint\tPrint the last 10 log entries\n" 
+    printf "\tplot\tPlot temperature of the last 24 h\n" 
+}
+
 create_log_file () {
     if ! [ -e $LOG_FILE ]; then
         mkdir --parents $LOG_DIR
@@ -48,9 +55,7 @@ case "$1" in
         plot_log
 	exit 0;;
     *)
-	echo 'Not a valid argument. Valid arguments are:'
-	printf "\tlog\tWrite temperature to log file\n"
-        printf "\tprint\tPrint the last 10 log entries\n" 
+        print_error_msg	
 	exit 1;;
 esac
 

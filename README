@@ -1,1 +1,7 @@
-templogger is a simple script to log cpu temperature
+templogger logs cpu temperature
+
+cronjob every 5 min:
+
+*/5 * * * * templogger log
+
+

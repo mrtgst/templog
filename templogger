@@ -32,8 +32,15 @@ print_log () {
 case "$1" in
     "log")
         create_log_file
-        log_temp;;
+        log_temp
+	exit 0;;
     "print")
-        print_log;;
+        print_log
+	exit 0;;
+    *)
+	echo 'Not a valid argument. Valid arguments are:'
+	printf "\tlog\tWrite temperature to log file\n"
+        printf "\tprint\tPrint the last 10 log entries\n" 
+	exit 1;;
 esac
 

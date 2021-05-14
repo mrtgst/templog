@@ -29,6 +29,14 @@ print_log () {
     tail -n +2 "$LOG_FILE"
 }
 
+plot_log () {
+# plot temperatures with gnuplot
+gnuplot -d -e "set terminal dumb; set xdata time; set timefmt '%M:%S'; \
+	set format x '%M:%S'; set xrange ['00:00':'23:59']; set yrange [50:70]; \
+	set title 'Temperature last 24 hours';
+	set tics scale 0; plot '$LOG_FILE' using 2:3 with lines notitle"
+}
+
 case "$1" in
     "log")
         create_log_file
@@ -36,6 +44,9 @@ case "$1" in
 	exit 0;;
     "print")
         print_log
+	exit 0;;
+    "plot")
+        plot_log
 	exit 0;;
     *)
 	echo 'Not a valid argument. Valid arguments are:'

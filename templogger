@@ -11,7 +11,7 @@ print_error_msg () {
     echo 'Not a valid argument. Valid arguments are:'
     printf "\tlog\tWrite temperature to log file\n"
     printf "\tprint\tPrint the last 10 log entries\n" 
-    printf "\tplot\tPlot temperature of the last 24 h\n" 
+    printf "\tplot\tPlot temperatures as of today\n" 
 }
 
 create_log_file () {
@@ -38,9 +38,14 @@ print_log () {
 
 plot_log () {
 # plot temperatures with gnuplot
+TODAY=$(date +"%Y-%m-%d")
+DATA=$(awk -v today="${TODAY}" '{if ($1==today) print $2,$3}' $LOG_FILE)
+echo "$DATA" > "$LOG_DIR"/plot_data
+
 gnuplot -d -e "set terminal dumb; set xdata time; set timefmt '%M:%S'; \
-	set format x '%M:%S'; set title 'Temperature last 24 hours'; \
-	set tics scale 0; plot '$LOG_FILE' using 2:3 with lines notitle"
+		set format x '%M:%S'; set title 'Temperatures today (${TODAY})'; \
+	set tics scale 0; plot '${LOG_DIR}/plot_data' using 1:2 with lines notitle"
+#rm -f "$LOG_DIR"/plot_data
 }
 
 case "$1" in

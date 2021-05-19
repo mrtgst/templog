@@ -1,5 +1,11 @@
 templog logs cpu temperature to /var/log/temp.log
 
+available commands:
+
+templog log
+templog print
+templog plot (dep: gnuplot)
+
 install:
 
 git clone https://github.com/mrtgst/templog

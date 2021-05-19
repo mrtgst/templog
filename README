@@ -1,7 +1,14 @@
-templogger logs cpu temperature
+templog logs cpu temperature to /var/log/temp.log
 
-cronjob every 5 min:
+install:
 
-*/5 * * * * templogger log
+git clone https://github.com/mrtgst/templog
+cd templog
+ln -s $PWD/templog /usr/bin/templog
 
+add to crontab to log every 5 min:
 
+*/5 * * * * /usr/bin/templog log
+
+cheers
+mrtgst

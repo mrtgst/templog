@@ -1,10 +1,12 @@
 templog logs cpu temperature to /var/log/temp.log
 
+
 available commands:
 
 templog log
 templog print
 templog plot (dep: gnuplot)
+
 
 install:
 
@@ -15,6 +17,7 @@ ln -s $PWD/templog /usr/bin/templog
 add to crontab to log every 5 min:
 
 */5 * * * * /usr/bin/templog log
+
 
 cheers
 mrtgst

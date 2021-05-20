@@ -1,4 +1,4 @@
-templog logs cpu temperature to /var/log/temp.log
+templog logs raspberry pi cpu temperature to /var/log/temp.log
 
                          Temperatures today (2021-05-20)                       
                                                                                

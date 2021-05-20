@@ -4,7 +4,7 @@
 # location of system file with the temperature
 SYS_TEMP_FILE='/sys/class/thermal/thermal_zone0/temp' 
 # log file location 
-LOG_DIR="/var/log/"
+LOG_DIR="var/log/"
 LOG_FILE="$LOG_DIR/temp.log"
 
 print_error_msg () {

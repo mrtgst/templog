@@ -1,14 +1,37 @@
 templog logs cpu temperature to /var/log/temp.log
 
+                         Temperatures today (2021-05-20)                       
+                                                                               
+  80 +---------------------------------------------------------------------+   
+     |                                                         *           |   
+     |                                                         *           |   
+  75 |                                                         *           |   
+     |                                                         *           |   
+  70 |                                                         **          |   
+     |                                                         **          |   
+     |                                                         **          |   
+  65 |                                                         **       *  |   
+     |                                                        * *      ** *|   
+  60 |                                                     *  * *      ****|   
+     |                                                     *  * *     *****|   
+     |                                                    **  * *     ** * |   
+  55 |                                                **  * ***  *   *     |   
+     |******** * *          *        *                ****  *    ** *      |   
+  50 |     ** ********************************** **** *           ***      |   
+     |                             **   * *     **   *                     |   
+     |                                                                     |   
+  45 +---------------------------------------------------------------------+   
+   00:00       02:00      04:00       06:00       08:00      10:00       12:00 
+                                                                               
 
-available commands:
+COMMANDS
 
 templog log
 templog print
 templog plot (dep: gnuplot)
 
 
-install:
+INSTALLATION
 
 git clone https://github.com/mrtgst/templog
 cd templog
@@ -20,4 +43,3 @@ add to crontab to log every 5 min:
 
 
 cheers
-mrtgst

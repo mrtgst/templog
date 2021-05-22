@@ -43,12 +43,18 @@ plot_log () {
 	PLOT_FILE='/tmp/plot_data'
 	echo "$DATA" > $PLOT_FILE
 
+	# calculate average
+	N=$(wc -l $PLOT_FILE | cut -d ' ' -f 1)
+	SUM=$(awk '{sum+=$2} END {print sum}' $PLOT_FILE)
+	AVG=$(( $SUM / $N  ))
+
+	# plot
 	gnuplot -d -e "set terminal dumb; set xdata time; set timefmt '%s'; \
-		set title 'Temperatures last 24 h'; \
+		set title 'Temperature last 24 h (avg: ${AVG})'; \
 		set tics scale 0; plot '${PLOT_FILE}' using 1:2 with lines notitle"
 	
+	# remove temporary file
 	rm -f $PLOT_FILE 
-	#set format x '%M:%S'
 }
 
 case "$1" in

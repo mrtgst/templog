@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # templog logs cpu temperature to /var/log/temp.log 
 
 # log file location 

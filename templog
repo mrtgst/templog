@@ -16,7 +16,7 @@ print_error_msg () {
 
 create_log_file () {
 	if ! [ -e $LOG_FILE ]; then
-	echo "Asking for root permission to create log file $LOG_DIR/$LOG_FILE"
+	echo "Asking for root permission to create log file $LOG_FILE"
 		sudo touch $LOG_FILE && sudo chmod 777 $LOG_FILE || exit 2 
 		echo "Created log file at $LOG_FILE"
 	fi

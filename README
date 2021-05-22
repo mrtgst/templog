@@ -1,4 +1,4 @@
-templog logs raspberry pi cpu temperature to /var/log/temp.log
+templog logs cpu or other temperature to /var/log/temp.log
 
                      Temperature last 24 h (avg: 51.6)
 
@@ -28,7 +28,7 @@ COMMANDS
 
 templog log
 templog print
-templog plot (dep: gnuplot, bc)
+templog plot [hours] (dep: gnuplot, bc)
 
 
 INSTALLATION
@@ -40,6 +40,3 @@ ln -s $PWD/templog /usr/bin/templog
 add to crontab to log every 5 min:
 
 */5 * * * * /usr/bin/templog log
-
-
-cheers

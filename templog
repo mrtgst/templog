@@ -1,15 +1,16 @@
 #!/bin/bash
-# templog logs cpu temperature to /var/log/temp.log 
+# templog logs temperature to /var/log/temp.log 
+VERSION=0.1.0
 
 # log file location 
 LOG_DIR="/var/log"
 LOG_FILE="$LOG_DIR/temp.log"
 
 print_error_msg () {
-    echo 'Not a valid argument. Valid arguments are:'
+    echo 'templog $VERSION. Valid arguments are:'
     printf "\tlog\tWrite temperature to log file\n"
     printf "\tprint\tPrint the last 10 log entries\n" 
-    printf "\tplot\tPlot temperatures in the last 24 h\n" 
+    printf "\tplot [hours]\tPlot temperatures in the last 24 h\n" 
 }
 
 create_log_file () {

@@ -7,18 +7,19 @@ LOG_DIR="/var/log"
 LOG_FILE="$LOG_DIR/temp.log"
 
 print_error_msg () {
-    echo 'templog $VERSION. Valid arguments are:'
-    printf "\tlog\tWrite temperature to log file\n"
-    printf "\tprint\tPrint the last 10 log entries\n" 
-    printf "\tplot [hours]\tPlot temperatures in the last 24 h\n" 
+	echo "templog $VERSION"
+	echo ""
+	printf "\tlog\t\tWrite temperature to log file $LOG_FILE\n"
+	printf "\tprint\t\tPrint log entries\n" 
+	printf "\tplot [hours]\tPlot temperatures in the last 24 h\n" 
 }
 
 create_log_file () {
-    if ! [ -e $LOG_FILE ]; then
+	if ! [ -e $LOG_FILE ]; then
 	echo "Asking for root permission to create log file $LOG_DIR/$LOG_FILE"
-        sudo touch $LOG_FILE && sudo chmod 777 $LOG_FILE || exit 2 
-        echo "Created log file at $LOG_FILE"
-    fi
+		sudo touch $LOG_FILE && sudo chmod 777 $LOG_FILE || exit 2 
+		echo "Created log file at $LOG_FILE"
+	fi
 }
 
 check_sensor () {
@@ -49,13 +50,13 @@ log_temp () {
 	check_sensor
 
 	TIME=$(date +%s)
-    LOG_STRING="$TIME $TEMP"
-    echo "$LOG_STRING" >> $LOG_FILE 
+	LOG_STRING="$TIME $TEMP"
+	echo "$LOG_STRING" >> $LOG_FILE 
 }
 
 print_log () {
-    head -n 1 "$LOG_FILE"
-    tail -n +2 "$LOG_FILE"
+	head -n 1 "$LOG_FILE"
+	tail -n +2 "$LOG_FILE"
 }
 
 plot_log () {
@@ -78,28 +79,28 @@ plot_log () {
 		set title 'Temperature last ${1} h (avg: ${AVG})'; \
 		set format x '%H'; \
 		set tics scale 0; plot '${PLOT_FILE}' using 1:2 notitle pt '*'"
-	
+
 	# remove temporary file
 	rm -f $PLOT_FILE 
 }
 
 case "$1" in
-    "log")
-        create_log_file
-        log_temp
+	"log")
+		create_log_file
+		log_temp
 		exit 0;;
-    "print")
-        print_log
+	"print")
+		print_log
 		exit 0;;
-    "plot")
+	"plot")
 		if ! [ -v $2 ]; then
-        	plot_log $2
+		plot_log $2
 		else
 			plot_log 24
 		fi
 		exit 0;;
-    *)
-        print_error_msg	
+	*)
+		print_error_msg	
 		exit 1;;
 esac
 

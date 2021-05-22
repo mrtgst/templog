@@ -94,7 +94,7 @@ case "$1" in
 		exit 0;;
 	"plot")
 		if ! [ -v $2 ]; then
-		plot_log $2
+			plot_log $2
 		else
 			plot_log 24
 		fi

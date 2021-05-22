@@ -29,16 +29,16 @@ log_temp () {
     	TEMP=$(head -n 1 $SYS_TEMP_FILE | xargs -I{} awk "BEGIN {printf \"%.2f\n\", {}/1000}")
 	else
 		if [ -a "$HOME"/.templogrc ]; then
-			. "$HOME"/.templogrc	
-			TEMP=$(sensors -u ${SENSOR1} | grep temp1_input | awk '{printf "%.1f", $2}')
+			SENSOR=$(cat "$HOME"/.templogrc)	
+			TEMP=$(sensors -u ${SENSOR} | grep temp1_input | awk '{printf "%.1f", $2}')
 		else
 			echo "Could not find $SYS_TEMP_FILE nor $HOME/.templogrc."
 			echo ""
-			echo "Create a file $HOME/.templogrc with a variable SENSOR1 containing the name of the sensor you want to measure with command 'sensors' (dep: lm_sensors)."
+			echo "Create a file $HOME/.templogrc containing the name of the sensor you want to measure. To get the name of the sensor type the command 'sensors' (dep: lm_sensors)."
 			echo ""
 			echo "For example, insert the desired <sensor> in the following command:"
 			echo ""
-			echo 'echo "SENSOR1=<sensor>" >> ${HOME}/.templogrc'
+			echo 'echo "<sensor>" >> ${HOME}/.templogrc'
 			exit 2
 		fi
 	fi

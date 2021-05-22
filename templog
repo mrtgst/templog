@@ -20,13 +20,10 @@ create_log_file () {
     fi
 }
 
-log_temp () {
-	# location of system file with the temperature
-	SYS_TEMP_FILE='/sys/class/thermal/thermal_zone0/temp' 
-	
+check_sensor () {
 	# check if temperature file exists, otherwise use lm_sensors
 	if [ -a $SYS_TEMP_FILE ]; then
-    	TEMP=$(head -n 1 $SYS_TEMP_FILE | xargs -I{} awk "BEGIN {printf \"%.2f\n\", {}/1000}")
+		TEMP=$(head -n 1 $SYS_TEMP_FILE | xargs -I{} awk "BEGIN {printf \"%.2f\n\", {}/1000}")
 	else
 		if [ -a "$HOME"/.templogrc ]; then
 			SENSOR=$(cat "$HOME"/.templogrc)	
@@ -42,6 +39,13 @@ log_temp () {
 			exit 2
 		fi
 	fi
+}
+
+log_temp () {
+	# location of system file with the temperature
+	SYS_TEMP_FILE='/sys/class/thermal/thermal_zone0/temp' 
+	
+	check_sensor
 
 	TIME=$(date +%s)
     LOG_STRING="$TIME $TEMP"

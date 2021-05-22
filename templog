@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # templog logs cpu temperature to /var/log/temp.log 
 
 # location of system file with the temperature
@@ -46,7 +46,8 @@ plot_log () {
 	# calculate average
 	N=$(wc -l $PLOT_FILE | cut -d ' ' -f 1)
 	SUM=$(awk '{sum+=$2} END {print sum}' $PLOT_FILE)
-	AVG=$(( $SUM / $N  ))
+	AVG=$(echo $SUM / $N | bc -l)
+	AVG=$(printf '%.1f' $AVG)
 
 	# plot
 	gnuplot -d -e "set terminal dumb; set xdata time; set timefmt '%s'; \

@@ -61,7 +61,6 @@ plot_log () {
 	# plot temperatures with gnuplot
 	NOW=$(date +"%s")
 	DELTA_T=$(( 60 * 60 * $1 ))
-	echo $DELTA_T
 	T=$(( $NOW - $DELTA_T ))
 	DATA=$(awk -v t="${T}" '{if ($1>t) print $1,$2}' $LOG_FILE)
 	PLOT_FILE='/tmp/plot_data'

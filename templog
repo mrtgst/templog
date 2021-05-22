@@ -60,7 +60,9 @@ print_log () {
 plot_log () {
 	# plot temperatures with gnuplot
 	NOW=$(date +"%s")
-	T=$(( $NOW - 86400 ))
+	DELTA_T=$(( 60 * 60 * $1 ))
+	echo $DELTA_T
+	T=$(( $NOW - $DELTA_T ))
 	DATA=$(awk -v t="${T}" '{if ($1>t) print $1,$2}' $LOG_FILE)
 	PLOT_FILE='/tmp/plot_data'
 	echo "$DATA" > $PLOT_FILE
@@ -73,7 +75,7 @@ plot_log () {
 
 	# plot
 	gnuplot -d -e "set terminal dumb; set xdata time; set timefmt '%s'; \
-		set title 'Temperature last 24 h (avg: ${AVG})'; \
+		set title 'Temperature last ${1} h (avg: ${AVG})'; \
 		set format x '%H'; \
 		set tics scale 0; plot '${PLOT_FILE}' using 1:2 notitle pt '*'"
 	
@@ -85,15 +87,19 @@ case "$1" in
     "log")
         create_log_file
         log_temp
-	exit 0;;
+		exit 0;;
     "print")
         print_log
-	exit 0;;
+		exit 0;;
     "plot")
-        plot_log
-	exit 0;;
+		if ! [ -v $2 ]; then
+        	plot_log $2
+		else
+			plot_log 24
+		fi
+		exit 0;;
     *)
         print_error_msg	
-	exit 1;;
+		exit 1;;
 esac
 

@@ -52,7 +52,7 @@ plot_log () {
 	# plot
 	gnuplot -d -e "set terminal dumb; set xdata time; set timefmt '%s'; \
 		set title 'Temperature last 24 h (avg: ${AVG})'; \
-		set format x '%H:%M'; \
+		set format x '%H'; \
 		set tics scale 0; plot '${PLOT_FILE}' using 1:2 with lines notitle"
 	
 	# remove temporary file

@@ -1,6 +1,6 @@
 #!/bin/sh
 # templog logs temperature to /var/log/temp.log 
-VERSION=0.1.0
+VERSION=0.1.1
 
 # log file location 
 LOG_DIR="/var/log"

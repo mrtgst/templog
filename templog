@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # templog logs temperature to /var/log/temp.log 
 VERSION=0.1.0
 
@@ -9,7 +9,7 @@ LOG_FILE="$LOG_DIR/temp.log"
 print_error_msg () {
 	echo "templog $VERSION"
 	echo ""
-	printf "\tlog\t\tWrite temperature to log file $LOG_FILE\n"
+	printf "\tlog\t\tWrite temperature to log file %s\n" $LOG_FILE
 	printf "\tprint\t\tPrint log entries\n" 
 	printf "\tplot [hours]\tPlot temperatures in the last 24 h\n" 
 }
@@ -24,12 +24,12 @@ create_log_file () {
 
 check_sensor () {
 	# check if temperature file exists, otherwise use lm_sensors
-	if [ -a $SYS_TEMP_FILE ]; then
-		TEMP=$(head -n 1 $SYS_TEMP_FILE | xargs -I{} awk "BEGIN {printf \"%.2f\n\", {}/1000}")
+	if [ -e "$SYS_TEMP_FILE" ]; then
+		TEMP=$(head -n 1 "$SYS_TEMP_FILE" | xargs -I{} awk "BEGIN {printf \"%.2f\n\", {}/1000}")
 	else
-		if [ -a "$HOME"/.templogrc ]; then
+		if [ -e "$HOME"/.templogrc ]; then
 			SENSOR=$(cat "$HOME"/.templogrc)	
-			TEMP=$(sensors -u ${SENSOR} | grep temp1_input | awk '{printf "%.1f", $2}')
+			TEMP=$(sensors -u "${SENSOR}" | grep temp1_input | awk '{printf "%.1f", $2}')
 		else
 			echo "Could not find $SYS_TEMP_FILE nor $HOME/.templogrc."
 			echo ""
@@ -37,7 +37,7 @@ check_sensor () {
 			echo ""
 			echo "For example, insert the desired <sensor> in the following command:"
 			echo ""
-			echo 'echo "<sensor>" >> ${HOME}/.templogrc'
+			echo "echo <sensor> >> ${HOME}/.templogrc"
 			exit 2
 		fi
 	fi
@@ -62,8 +62,9 @@ print_log () {
 plot_log () {
 	# plot temperatures with gnuplot
 	NOW=$(date +"%s")
-	DELTA_T=$(( 60 * 60 * $1 ))
-	T=$(( $NOW - $DELTA_T ))
+	HOURS="${1}"
+	DELTA_T=$(( 60 * 60 * HOURS ))
+	T=$(( NOW - DELTA_T ))
 	DATA=$(awk -v t="${T}" '{if ($1>t) print $1,$2}' $LOG_FILE)
 	PLOT_FILE='/tmp/plot_data'
 	echo "$DATA" > $PLOT_FILE
@@ -71,14 +72,15 @@ plot_log () {
 	# calculate average
 	N=$(wc -l $PLOT_FILE | cut -d ' ' -f 1)
 	SUM=$(awk '{sum+=$2} END {print sum}' $PLOT_FILE)
-	AVG=$(echo $SUM / $N | bc -l)
-	AVG=$(printf '%.1f' $AVG)
+	AVG=$(echo "$SUM" / "$N" | bc -l)
+	AVG=$(printf '%.1f' "$AVG")
 
 	# plot
 	gnuplot -d -e "set terminal dumb; set xdata time; set timefmt '%s'; \
 		set title 'Temperature last ${1} h (avg: ${AVG})'; \
 		set format x '%H'; \
-		set tics scale 0; plot '${PLOT_FILE}' using 1:2 notitle pt '*'"
+		set tics scale 0; plot '${PLOT_FILE}' using 1:2 notitle pt '*'" \
+		2> /dev/null
 
 	# remove temporary file
 	rm -f $PLOT_FILE 
@@ -93,10 +95,10 @@ case "$1" in
 		print_log
 		exit 0;;
 	"plot")
-		if ! [ -v $2 ]; then
-			plot_log $2
-		else
+		if [ -z "$2" ]; then
 			plot_log 24
+		else
+			plot_log "$2"
 		fi
 		exit 0;;
 	*)
